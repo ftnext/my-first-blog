@@ -10,6 +10,10 @@ body {
     background-color: #ff9400;
     margin-top: 0;
     padding: 20px 20px 20px 40px;
+    /* 固定ヘッダー */
+    position: fixed;
+    z-index: 100;
+    width: 100%;
 }
 
 .page-header h1, .page-header h1 a, .page-header h1 a:visited, .page-header h1 a:active {
@@ -51,4 +55,12 @@ h1, h2, h3, h4 {
 
 .post h1 a, .post h1 a:visited {
     color: #000000;
+}
+
+/* 固定ヘッダー導入により、margin-topを設定 */
+.post:first-of-type {
+    margin-top: 160px;
+}
+.fixed-header-margin {
+    margin-top: 160px;
 }
