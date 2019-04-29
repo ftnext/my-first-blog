@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required, permission_required
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
@@ -15,6 +16,9 @@ def post_list(request):
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
+    if post.published_date is None and \
+            not request.user.has_perm('blog.view_draft_posts'):
+        raise PermissionDenied
     return render(request, 'blog/post_detail.html', {'post':post})
 
 @login_required
@@ -47,11 +51,13 @@ def post_edit(request, pk):
     return render(request, 'blog/post_edit.html', {'form': form})
 
 @login_required
+@permission_required('blog.view_draft_posts', raise_exception=True)
 def post_draft_list(request):
     posts = Post.objects.filter(published_date__isnull=True).order_by('created_date')
     return render(request, 'blog/post_draft_list.html', {'posts': posts})
 
 @login_required
+@permission_required('blog.publish_post', raise_exception=True)
 def post_publish(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.publish()
@@ -78,6 +84,7 @@ def add_comment_to_post(request, pk):
     return render(request, 'blog/add_comment_to_post.html', {'form': form})
 
 @login_required
+@permission_required('blog.approve_comment', raise_exception=True)
 def comment_approve(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     comment.approve()
