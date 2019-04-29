@@ -11,6 +11,12 @@ class Post(models.Model):
     published_date = models.DateTimeField(
             blank=True, null=True)
 
+    class Meta:
+        permissions = [
+            ('publish_post', 'Can publish a draft post'),
+            ('view_draft_posts', 'Can view draft posts'),
+        ]
+
     def publish(self):
         self.published_date = timezone.now()
         self.save()
@@ -28,6 +34,11 @@ class Comment(models.Model):
     text = models.TextField()
     created_date = models.DateTimeField(default=timezone.now)
     approved_comment = models.BooleanField(default=False)
+
+    class Meta:
+        permissions = [
+            ('approve_comment', 'Can approve a comment'),
+        ]
 
     def approve(self):
         self.approved_comment = True
