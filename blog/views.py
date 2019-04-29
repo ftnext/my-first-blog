@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
@@ -18,6 +18,7 @@ def post_detail(request, pk):
     return render(request, 'blog/post_detail.html', {'post':post})
 
 @login_required
+@permission_required('blog.add_post', raise_exception=True)
 def post_new(request):
     if request.method == "POST":
         form = PostForm(request.POST)
@@ -31,6 +32,7 @@ def post_new(request):
     return render(request, 'blog/post_edit.html', {'form': form})
 
 @login_required
+@permission_required('blog.change_post', raise_exception=True)
 def post_edit(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method == "POST":
@@ -56,6 +58,7 @@ def post_publish(request, pk):
     return redirect('post_detail', pk=pk)
 
 @login_required
+@permission_required('blog.delete_post', raise_exception=True)
 def post_remove(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.delete()
@@ -81,6 +84,7 @@ def comment_approve(request, pk):
     return redirect('post_detail', pk=comment.post.pk)
 
 @login_required
+@permission_required('blog.delete_comment', raise_exception=True)
 def comment_remove(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     comment.delete()
