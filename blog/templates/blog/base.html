@@ -9,11 +9,16 @@
 </head>
 <body>
   <div class="page-header">
-    {% if user.is_authenticated %}
+    {% if perms.blog.add_post %}
       <a href="{% url 'post_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
+    {% endif %}
+    {% if perms.blog.view_draft_posts %}
       <a href="{% url 'post_draft_list' %}" class="top-menu"><span class="glyphicon glyphicon-edit"></span></a>
+    {% endif %}
+    {% if user.is_authenticated %}
       <p class="top-menu">Hello {{ user.username }} <small>(<a href="{% url 'logout' %}">Log out</a>)</small></p>
     {% else %}
+      <a href="{% url 'register' %}" class="top-menu"><span class="glyphicon glyphicon-registration-mark"></span></a>
       <a href="{% url 'login' %}" class="top-menu"><span class="glyphicon glyphicon-lock"></span></a>
     {% endif %}
     <h1><a href="/">Django Girls Blog</a></h1>
