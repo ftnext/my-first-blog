@@ -27,10 +27,10 @@
         {{ comment.created_date }}
         {% if not comment.approved_comment %}
           {% if perms.blog.delete_comment %}
-          <a class="btn btn-default" href="{% url 'comment_remove' pk=comment.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
+            <a class="btn btn-default" href="{% url 'comment_remove' pk=comment.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
           {% endif %}
           {% if perms.blog.approve_comment %}
-          <a class="btn btn-default" href="{% url 'comment_approve' pk=comment.pk %}"><span class="glyphicon glyphicon-ok"></span></a>
+            <a class="btn btn-default" href="{% url 'comment_approve' pk=comment.pk %}"><span class="glyphicon glyphicon-ok"></span></a>
           {% endif %}
         {% endif %}
       </div>
